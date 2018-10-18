@@ -62,6 +62,23 @@ public class Network
 
     }
 
+    public void InitialiseHidden(int hiddenLayerCount, int hiddenNeuronCount)
+    {
+        random = false;
+        inputLayer.Clear();
+        hiddenLayers.Clear();
+        outputLayer.Clear();
+
+        for (int i = 0; i < hiddenLayerCount + 1; i++)
+        {
+
+            Matrix<float> f = Matrix<float>.Build.Dense(1, hiddenNeuronCount);
+            hiddenLayers.Add(f);
+           
+        }
+        
+    }
+
     public void RandomiseWeights()
     {
         for (int i = 0; i < weights.Count; i++)
@@ -74,6 +91,49 @@ public class Network
                 }
             }
         }
+    }
+
+    public Network InitialiseCopy (int hiddenLayerCount, int hiddenNeuronCount)
+    {
+        Network n = new Network();
+
+        List<Matrix<float>> newWeights = new List<Matrix<float>>();
+
+        for (int i = 0; i < weights.Count; i++)
+        {
+
+            //Loop through matrix
+            Matrix<float> newDim = Matrix<float>.Build.Dense(weights[i].RowCount, weights[i].ColumnCount);
+
+            for (int x = 0; x < newDim.RowCount; x++)
+            {
+                for (int y = 0; y < newDim.ColumnCount; y++)
+                {
+                    newDim[x, y] = weights[i][x, y];
+
+                }
+            }
+
+            newWeights.Add(newDim);
+
+
+        }
+
+        List<float> newBiases = new List<float>();
+
+        for (int i = 0; i < biases.Count; i++)
+        {
+            newBiases.Add(biases[i]);
+        }
+
+
+        n.weights = newWeights;
+        n.biases = newBiases;
+
+        n.InitialiseHidden(hiddenLayerCount, hiddenNeuronCount);
+
+        return n;
+
     }
 
     #endregion

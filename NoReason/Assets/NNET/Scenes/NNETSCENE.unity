@@ -3580,14 +3580,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   controller: {fileID: 4705079805274577211}
-  newPopulation: 30
-  population: 70
-  mutationChance: 1
+  newPopulation: 60
+  population: 100
+  mutationChance: 2.5
   currentGeneration: []
   genePool: 
+  maxFitness: 0
+  avgFitness: 0
   currentGenerationC: 0
   currentGenome: 0
-  mutateTop: 20
+  mutateTop: 15
   currentGenerationFinished: []
 --- !u!1 &1053182163
 GameObject:
@@ -6842,7 +6844,7 @@ PrefabInstance:
     - target: {fileID: 8084097131010152172, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 12.881
+      value: 9.1
       objectReference: {fileID: 0}
     - target: {fileID: 8084097131010152172, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
@@ -6937,32 +6939,32 @@ PrefabInstance:
     - target: {fileID: 8084097131009985217, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
       propertyPath: LAYERS
-      value: 2
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 8084097131009985217, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
       propertyPath: NEURONS
-      value: 80
+      value: 100
       objectReference: {fileID: 0}
     - target: {fileID: 8084097131009985217, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
       propertyPath: useColliderFitness
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8084097131009985217, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
       propertyPath: distanceMultiplier
-      value: 0.1
+      value: 1.08
       objectReference: {fileID: 0}
     - target: {fileID: 8084097131009985217, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
       propertyPath: sensorMultiplier
-      value: 0.3
+      value: 1.04
       objectReference: {fileID: 0}
     - target: {fileID: 8084097131009985217, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
       propertyPath: avgSpeedMultiplier
-      value: 0.4
+      value: 0.2
       objectReference: {fileID: 0}
     - target: {fileID: 8084097131010152172, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
