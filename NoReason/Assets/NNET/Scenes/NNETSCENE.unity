@@ -6959,7 +6959,7 @@ PrefabInstance:
     - target: {fileID: 8084097131009985217, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}
       propertyPath: sensorMultiplier
-      value: 1.04
+      value: 9.97
       objectReference: {fileID: 0}
     - target: {fileID: 8084097131009985217, guid: 2e7c2dec6d004014dac387abe5b0f37d,
         type: 3}

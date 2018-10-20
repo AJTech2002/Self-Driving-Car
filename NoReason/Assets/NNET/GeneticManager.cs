@@ -376,8 +376,7 @@ C.biases[b] = Random.Range(-1f, 1f);
     {
         avgFitness = (avgFitness + fitness) / 2;
 
-        if (fitness > maxFitness)
-            maxFitness = fitness;
+        maxFitness += fitness;
 
         net.fitness = fitness;
         if (currentGenome < currentGeneration.Count)
