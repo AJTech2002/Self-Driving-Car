@@ -9,6 +9,7 @@ public class GeneticManager : MonoBehaviour
 {
     #region Variables
     [Header("References")]
+    public GraphHelp grapher;
     public SimpleCarController controller;
 
     [Header("Controllable")]
@@ -33,8 +34,10 @@ public class GeneticManager : MonoBehaviour
     #endregion
 
     //Create a new population of random NetworkStorages
-    private void Awake()
+    private void Start()
     {
+        grapher.AddGraph("AverageFitness", Color.red);
+        grapher.AddGraph("CurrentFitness", Color.blue);
         for (int i = 0; i < population+1; i++)
         {
             Network n = new Network();
@@ -81,93 +84,32 @@ public class GeneticManager : MonoBehaviour
 
         genePool.Clear();
         tops.Clear();
+        fitnessAvg.Clear();
+        grapher.ClearAllPoints();
 
-      
+
 
         for (int i = 0; i < mutateTop; i++)
         {
-           
-           int genePoolC = Mathf.RoundToInt(currentGenerationFinished[i].fitness*100);
 
-           for (int c = 0; c < genePoolC+1; c++)
-           {
+            int genePoolC = Mathf.RoundToInt(currentGenerationFinished[i].fitness * 100);
+
+            for (int c = 0; c < genePoolC + 1; c++)
+            {
                 genePool.Add(i);
-           }
+            }
 
             tops.Add(i);
 
-        }
 
-        Breed();
+            Breed();
+
+        }
 
     }
 
     #region Stop
-    /*
-       for (int i = 0; i<tops.Count; i++)
-        {
-            if (currentGenerationFinished[tops[i]].fitness > 0.9f)
-            {
-                print("Save");
-    storages.Add(currentGenerationFinished[tops[i]]);
-                continue;
-            }
-
-int mutation = Random.Range(0, 101);
-
-float mC = mutationChance;
-            if (currentGenerationFinished[tops[i]].fitness< 0.4f)
-            {
-                mC += 2;
-                print("MC INCREASE");
-            }
-
-            if (mutation > mC)
-            {
-                Network A = currentGenerationFinished[tops[i]];
-Network B = currentGenerationFinished[genePool[Random.Range(0, genePool.Count)]];
-
-                if (A == B)
-                    B = currentGenerationFinished[genePool[Random.Range(0, genePool.Count)]];
-
-                Network C = A.InitialiseCopy(controller.LAYERS, controller.NEURONS);
-
-                for (int w = 0; w<A.weights.Count; w++)
-                {
-                    //C.weights[w] = CrossOver(A.weights[w], B.weights[w]);
-                    C.weights[w] = CrossOver(A.weights[w], B.weights[w]);
-                }
-
-                for (int b = 0; b<A.biases.Count; b++)
-                {
-                    int AorB = Random.Range(0, 2);
-                    if (AorB == 0)
-                    {
-                        C.biases[b] = A.biases[b];
-                    }
-                    else
-                    {
-                        C.biases[b] = B.biases[b];
-                    }
-                }
-
-                storages.Add(C);
-            }
-            else
-            {
-                Network C = currentGenerationFinished[i].InitialiseCopy(controller.LAYERS, controller.NEURONS);
-                for (int w = 0; w<C.weights.Count; w++)
-                {
-                    C.weights[w] = Mutate(C.weights[w]);
-                }
-
-                int b = Random.Range(0, C.biases.Count);
-C.biases[b] = Random.Range(-1f, 1f);
-
-                storages.Add(C);
-            }
-        }
-    */
+  
     #endregion
     //Breeds the top + creates some new mutations based on rate
     private List<Network> storages = new List<Network>();
@@ -338,8 +280,8 @@ C.biases[b] = Random.Range(-1f, 1f);
         Matrix<float> C = A;
         Matrix<float> D = B;
 
-        int k1 = Mathf.RoundToInt((C.RowCount * C.ColumnCount) * Random.Range(0.00f, 0.300f));
-        int k2 = Mathf.RoundToInt((C.RowCount * C.ColumnCount) * Random.Range(0.700f, 1.00f));
+        int k1 = Mathf.RoundToInt((C.RowCount * C.ColumnCount) * Random.Range(0f, 1f));
+        int k2 = Mathf.RoundToInt((C.RowCount * C.ColumnCount) * Random.Range(0f, 1f));
 
         int c = 0;
         for (int x = 0; x < A.RowCount; x++)
@@ -371,18 +313,37 @@ C.biases[b] = Random.Range(-1f, 1f);
         
     }
 
+    List<float> fitnessAvg = new List<float>();
+
+    int g = 0;
     //Cars call this function when they die
     public void Death (float fitness, Network net)
     {
-        avgFitness = (avgFitness + fitness) / 2;
+
+        fitnessAvg.Add(fitness);
+
+        float avg = 0;
+        for (int i = 0; i < fitnessAvg.Count; i++)
+        {
+            avg += fitnessAvg[i];
+
+        }
+
+        avg /= fitnessAvg.Count;
+        avgFitness = avg;
 
         maxFitness += fitness;
+
+        grapher.Plot(g, fitness, "CurrentFitness");
+        grapher.Plot(g,avg, "AverageFitness");
+
 
         net.fitness = fitness;
         if (currentGenome < currentGeneration.Count)
         currentGeneration[currentGenome].fitness = fitness;
         Sort();
         Next();
+        g++;
     }
     
     //Sorting algorithm simple
@@ -393,23 +354,3 @@ C.biases[b] = Random.Range(-1f, 1f);
 
 }
 
-[System.Serializable]
-public class NetworkStorage
-{
-
-    public List<Matrix<float>> weights = new List<Matrix<float>>();
-    public List<float> biases = new List<float>();
-
-    public float fitness;
-    public int index;
-
-    public NetworkStorage (Network net, int i)
-    {
-        weights = new List<Matrix<float>>(net.weights);
-        biases = new List<float>(net.biases);
-        index = i;
-    
-    }
-
-
-}

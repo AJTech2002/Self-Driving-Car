@@ -246,7 +246,7 @@ public class SimpleCarController : MonoBehaviour
 
     public void Death()
     {
-        GameObject.FindObjectOfType<GeneticManager>().Death(overallFitness, network);
+        GameObject.FindObjectOfType<GeneticManagerTwo>().Death(overallFitness, network);
 
     }
 

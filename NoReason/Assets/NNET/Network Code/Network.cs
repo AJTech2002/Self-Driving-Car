@@ -96,9 +96,9 @@ public class Network
     public Network InitialiseCopy (int hiddenLayerCount, int hiddenNeuronCount)
     {
         Network n = new Network();
-
+       
         List<Matrix<float>> newWeights = new List<Matrix<float>>();
-
+        
         for (int i = 0; i < weights.Count; i++)
         {
 
@@ -146,7 +146,7 @@ public class Network
         inputLayer[0, 1] = b;
         inputLayer[0, 2] = c;
 
-        inputLayer = SigmoidActivate(inputLayer);
+        //inputLayer = SigmoidActivate(inputLayer);
 
         hiddenLayers[0] = ((inputLayer * weights[0]) + biases[0]).PointwiseTanh();
 
