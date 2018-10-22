@@ -22,6 +22,7 @@ public class GeneticManagerTwo : MonoBehaviour
 
     [Header("Crossover Controls")]
     public int bestAgentSelection = 6;
+    public int worstAgentSelection = 3;
     public int numberToCrossover = 4;
 
     //Create the initialPopulation
@@ -205,6 +206,16 @@ public class GeneticManagerTwo : MonoBehaviour
             newPopulationIndex++;
         }
 
+        for (int i = 0; i < worstAgentSelection; i++) {
+            int last = population.Length-1;
+            last -= i;
+            int f = Mathf.RoundToInt(population[last].fitness*10);
+            for (int c = 0; c < f; c++)
+            {
+                genePool.Add(last);
+            }
+        }
+
         return newPopulation;
     }
 
@@ -253,8 +264,16 @@ public class GeneticManagerTwo : MonoBehaviour
             int AIndex = i;
             int BIndex = i+1;
             if (genePool.Count >= 1) {
-                AIndex = genePool[Random.Range(0, genePool.Count)];
-                BIndex = genePool[Random.Range(0, genePool.Count)];
+                for (int l = 0; l < 100; l++) {
+                    AIndex = genePool[Random.Range(0, genePool.Count)];
+                    BIndex = genePool[Random.Range(0, genePool.Count)];
+
+                    if (AIndex != BIndex)
+                    {
+                        break;
+                    }
+
+                }
             }
 
             Network Child1 = new Network();
@@ -316,7 +335,7 @@ public class GeneticManagerTwo : MonoBehaviour
             if (Random.Range(0.0f, 1.0f) < mutationRate)
             {
                 int b = Random.Range(0, newPopulation[i].biases.Count);
-                newPopulation[i].biases[b] = Mathf.Clamp(newPopulation[i].biases[b] + Random.Range(-0.1f, 0.1f), -1f, 1f);
+                newPopulation[i].biases[b] = Mathf.Clamp(newPopulation[i].biases[b] + Random.Range(-1f, 1f), -1f, 1f);
 
             }
         }
@@ -334,7 +353,7 @@ public class GeneticManagerTwo : MonoBehaviour
             int randRow = Random.Range(0, C.RowCount);
 
             //Nudge Value in a random place up or down a bit
-            C[randRow, randColumn] = Mathf.Clamp(C[randRow, randColumn] + Random.Range(-0.11f, 0.11f), -1f, 1f);
+            C[randRow, randColumn] = Mathf.Clamp(C[randRow, randColumn] + Random.Range(-1f, 1f), -1f, 1f);
 
         }
         return C;
